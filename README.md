@@ -46,3 +46,33 @@ A ragtag bunch of strangers. Each having a set of unique skills and backgrounds.
       datasetA = gdal.Open(img_filename_16bandA, GA_ReadOnly)
       print('Size is %d x %d x %d' % (datasetA.RasterXSize, datasetA.RasterYSize, datasetA.RasterCount))
 
+
+
+
+# Project Structure
+
+The project conforms to the popular PyScaffold putup command structure for a basic python project.  The current package is only one level deep and consists of skeleton and currently only computes Fibonacci numbers.  To build and see this in action, the fibonacci command is exposed in the setup.cfg file so to build the project, in the directory run:
+
+```
+python setup.py build
+```
+
+Then run this to install the fibonacci command:
+
+```
+python setup.py install
+```
+
+And finally you should be able to put in commands like:
+
+```
+fibonacci 7
+```
+
+To see the seventh fib number.  To run the tests execute the following command:
+
+```
+python setup.py test
+```
+
+Right now it does test coverage but that can be disabled to just be straight up tests only.
