@@ -40,9 +40,9 @@ A ragtag bunch of strangers. Each having a set of unique skills and backgrounds.
 
   and
 
-         import gdal
-         from gdalconst import *
-         img_filename_16bandA = 'sixteen_band/6100_1_3_A.tif'
-         datasetA = gdal.Open(img_filename_16bandA, GA_ReadOnly)
-         print('Size is %d x %d x %d' % (datasetA.RasterXSize, datasetA.RasterYSize, datasetA.RasterCount))
+      import gdal
+      from gdalconst import *
+      img_filename_16bandA = 'sixteen_band/6100_1_3_A.tif'
+      datasetA = gdal.Open(img_filename_16bandA, GA_ReadOnly)
+      print('Size is %d x %d x %d' % (datasetA.RasterXSize, datasetA.RasterYSize, datasetA.RasterCount))
 
