@@ -1,6 +1,7 @@
 from __future__ import division, print_function, absolute_import
 import argparse
 import sys
+import os
 import logging
 import skimage
 from strangers_kaggle import __version__
@@ -57,13 +58,19 @@ def setup_logging(loglevel):
     logging.basicConfig(level=loglevel, stream=sys.stdout,
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
+def processTifFile(file, subdir):
+    print(subdir)
+    print(file)
+
 def main(args):
     args = parse_args(args)
     setup_logging(args.loglevel)
-    print (args.d)
-    _logger.debug("Processing image {}".format(args.d))
-
     print("The directory of TIF images for processing is {}".format(args.d))
+    for subdir, dirs, files in os.walk(args.d):
+        for file in files:
+            processTifFile(file, subdir)
+            _logger.debug("Processing image {}".format(file))
+
     _logger.info("Script ends here")
 
 def run():

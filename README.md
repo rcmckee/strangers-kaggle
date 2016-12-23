@@ -76,3 +76,33 @@ python setup.py test
 ```
 
 Right now it does test coverage but that can be disabled to just be straight up tests only.
+
+## Developing Your Own Pipeline
+
+Given the project structure above, it's trivial to implement your own script/entry point to the project.  Open setup.cfg and add a line to the console_scripts construct like so:
+
+```
+console_scripts =
+    fibonacci = strangers_kaggle.skeleton:run
+    skimagerun = strangers_kaggle.image_processor:run
+```
+
+Here I've added a command called skimagerun and assigned it to the newly added image_processor file.  If you open that up, it's got the same structure as skeleton.py and the argsparse shows one argument that it accepts.  So to compile this the first step is to install the new requirements that are imported in the file.  Do that by running this (or just the pip command if you have it):
+
+```
+sudo python -m pip install -r requirements.txt
+```
+
+Then compile and install the project with
+
+```
+python setup.py install
+```
+
+ After that's done you can see it enumerate a directory if you pass it into it by running the new command:
+
+ ```
+ skimagerun /media/david/63A92C5A7385D4CA/data/dstlsatellite/three_band/
+ ```
+
+ Where the directory is one on your computer that contains the TIFs.  You should see it enumerate the files in the directory.  
