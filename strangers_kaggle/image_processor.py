@@ -4,6 +4,8 @@ import sys
 import os
 import logging
 import skimage
+import gdal
+from gdalconst import *
 from strangers_kaggle import __version__
 from skimage import data
 
@@ -59,8 +61,9 @@ def setup_logging(loglevel):
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
 def processTifFile(file, subdir):
-    print(subdir)
-    print(file)
+    img_filename_16bandA = subdir + file
+    datasetA = gdal.Open(img_filename_16bandA, GA_ReadOnly)
+    print('Size is %d x %d x %d for file %s' % (datasetA.RasterXSize, datasetA.RasterYSize, datasetA.RasterCount, file))
 
 def main(args):
     args = parse_args(args)
