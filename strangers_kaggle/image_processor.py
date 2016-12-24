@@ -72,7 +72,11 @@ def processTifFile(file, subdir, xmax_ymin):
     name = "_".join(file.split('_')[0:3])
     print('Size is %d x %d x %d for file %s' % (datasetA.RasterXSize, datasetA.RasterYSize, datasetA.RasterCount, file))
     if name in xmax_ymin:
-        print(xmax_ymin[name])
+        w_prime = datasetA.RasterXSize*(datasetA.RasterXSize/(datasetA.RasterXSize + 1))
+        xscale = w_prime/xmax_ymin[name]['xMax']
+        h_prime = datasetA.RasterYSize*(datasetA.RasterYSize/(datasetA.RasterYSize + 1))
+        yscale = w_prime/xmax_ymin[name]['yMin']
+        # TODO image processing here where the scales are known
     else:
         print("Warning!  Couldn't find transform data for this TIF from the csv!")
 
