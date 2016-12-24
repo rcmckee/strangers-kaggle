@@ -113,8 +113,4 @@ python setup.py install
  skimagerun /media/david/63A92C5A7385D4CA/data/dstlsatellite/sixteen_band/ -f /media/david/63A92C5A7385D4CA/data/dstlsatellite/grid_sizes.csv
  ```
 
- The program will now display the file dimension data followed by the tuple read from the supplied csv.
-
- # GDAL
-
- A nice cookbook for gdal is [here](https://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html).
+ The program will now display the file dimension data followed by the tuple read from the supplied csv.  A nice cookbook for gdal is [here](https://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html).
