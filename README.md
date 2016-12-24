@@ -106,3 +106,11 @@ python setup.py install
  ```
 
  Where the directory is one on your computer that contains the TIFs.  You should see it enumerate the files in the directory.  
+
+ In order to get the transform data in (yMin and xMax), provide the csv file as input to skimagerun for example:
+
+ ```
+ skimagerun /media/david/63A92C5A7385D4CA/data/dstlsatellite/sixteen_band/ -f /media/david/63A92C5A7385D4CA/data/dstlsatellite/grid_sizes.csv
+ ```
+
+ The program will now display the file dimension data followed by the tuple read from the supplied csv.
