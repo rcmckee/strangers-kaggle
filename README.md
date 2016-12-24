@@ -114,3 +114,7 @@ python setup.py install
  ```
 
  The program will now display the file dimension data followed by the tuple read from the supplied csv.
+
+ # gdal
+
+ A nice cookbook for gdal is [here](https://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html).

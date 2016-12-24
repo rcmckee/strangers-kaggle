@@ -6,6 +6,7 @@ import logging
 import skimage
 import gdal
 from strangers_kaggle.load_sizes import *
+from strangers_kaggle.image_segmentation import *
 from gdalconst import *
 from strangers_kaggle import __version__
 from skimage import data
@@ -77,6 +78,7 @@ def processTifFile(file, subdir, xmax_ymin):
         h_prime = datasetA.RasterYSize*(datasetA.RasterYSize/(datasetA.RasterYSize + 1))
         yscale = w_prime/xmax_ymin[name]['yMin']
         # TODO image processing here where the scales are known
+        # segment(datasetA, file)
     else:
         print("Warning!  Couldn't find transform data for this TIF from the csv!")
 
@@ -89,8 +91,9 @@ def main(args):
         xmax_ymin = readFromFile(args.f)
     for subdir, dirs, files in os.walk(args.d):
         for file in files:
-            processTifFile(file, subdir, xmax_ymin)
-            _logger.debug("Processing image {}".format(file))
+            if file.endswith(".tif"):
+                processTifFile(file, subdir, xmax_ymin)
+                _logger.debug("Processing image {}".format(file))
     _logger.info("Script ends here")
 
 def run():
