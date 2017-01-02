@@ -114,3 +114,11 @@ python setup.py install
  ```
 
  The program will now display the file dimension data followed by the tuple read from the supplied csv.  A nice cookbook for gdal is [here](https://pcjericks.github.io/py-gdalogr-cookbook/raster_layers.html).
+
+Now you can segment based on the training like this:
+
+```
+skimagerun /media/david/63A92C5A7385D4CA/data/dstlsatellite/three_band/ -f /media/david/63A92C5A7385D4CA/data/dstlsatellite/grid_sizes.csv -t /media/david/63A92C5A7385D4CA/data/dstlsatellite/train_wkt_v4.csv
+```
+
+That command will create a directory next to "three_band" with masks to show what has been classified as what in the training data.
