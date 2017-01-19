@@ -80,7 +80,7 @@ def processTifFile(file, subdir, xmax_ymin, train_wkt_polys):
     # segment(dataset, subdir, file)
     name = file[:-4]
     name = "_".join(name.split('_')[0:3])
-    print('Size is %d x %d x %d for file %s' % (dataset.RasterXSize, dataset.RasterYSize, dataset.RasterCount, file))
+    # print('Size is %d x %d x %d for file %s' % (dataset.RasterXSize, dataset.RasterYSize, dataset.RasterCount, file))
     band0 = dataset.GetRasterBand(1)
     band1 = dataset.GetRasterBand(2)
     band2 = dataset.GetRasterBand(3)
@@ -103,9 +103,9 @@ def processTifFile(file, subdir, xmax_ymin, train_wkt_polys):
         srcImage = gdal.Open(img_filename_16bandA)
         geoTrans = srcImage.GetGeoTransform()
         for geom_index in xrange(len(train_wkt_polys[name])):
-            mask = polySetToMask(train_wkt_polys[name][geom_index + 1], dataset.RasterXSize, dataset.RasterYSize, geoTrans, xmax_ymin[name])
+            mask = polySetToMask(train_wkt_polys[name][geom_index + 1], dataset, geoTrans, xmax_ymin[name])
             if mask is not None and mask.any():
-                print('Starting processing!')
+                # print('Starting processing!')
                 gtiffDriver = gdal.GetDriverByName( 'GTiff' )
                 if not os.path.exists(subdir + '../trainingMasks/'):
                     os.makedirs(subdir + '../trainingMasks/')
@@ -117,9 +117,9 @@ def processTifFile(file, subdir, xmax_ymin, train_wkt_polys):
 
                 mask = mask.astype(gdalnumeric.uint8)
                 gdalnumeric.SaveArray(mask, subdir + "../trainingMasks/" + file + "_cl" + str(geom_index + 1) + ".jpg", format="JPEG")
-                print('Completed processing!')
-    else:
-        print('Warning!  Couldn\'t find training data for this TIF named %s from the training csv!' % (name))
+                # print('Completed processing!')
+    # else:
+        # print('Warning!  Couldn\'t find training data for this TIF named %s from the training csv!' % (name))
 
 def main(args):
     args = parse_args(args)

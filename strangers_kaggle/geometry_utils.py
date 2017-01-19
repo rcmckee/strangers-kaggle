@@ -1,5 +1,6 @@
 from osgeo import gdal, gdalnumeric, ogr, osr
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageChops, ImageOps
+import numpy as np
 import os, sys
 gdal.UseExceptions()
 
@@ -55,13 +56,13 @@ def stretch(a):
   im = im.point(lut)
   return imageToArray(im)
 
-def polySetToMask(ogr_geometry, pxWidth, pxHeight, geoTrans, xmax_ymin):
+def polySetToMask(ogr_geometry, dataset, geoTrans, xmax_ymin):
+    pxWidth = dataset.RasterXSize
+    pxHeight = dataset.RasterYSize
     points = []
     pixels = []
     xscale = 1
     yscale = 1
-    # geom = poly.GetNextFeature().GetGeometryRef()
-    # pts = geom.GetGeometryRef(0)
     geometry_count = ogr_geometry.GetGeometryCount()
     point_count = 0
     if xmax_ymin:
@@ -73,18 +74,32 @@ def polySetToMask(ogr_geometry, pxWidth, pxHeight, geoTrans, xmax_ymin):
         yscale = h_prime/xmax_ymin['yMin']
     else:
         print("Warning!  Couldn't find transform data for this TIF from the sizes csv!")
-    if geometry_count < 100:
+    if geometry_count < 500 and geometry_count > 0:
+        rasterPoly = Image.new("L", (pxWidth, pxHeight), 256)
         for geo in xrange(geometry_count):
+            rasterPolySingle = Image.new("L", (pxWidth, pxHeight), 256)
+            points = []
             geometry_instance = ogr_geometry.GetGeometryRef(geo)
-            # print(geometry_instance.GetGeometryRef(0).GetPoints())
             ogr_poly = geometry_instance.GetGeometryRef(0)
             for p in xrange(ogr_poly.GetPointCount()):
                 point_count += 1
                 points.append((int(round(w_prime*(ogr_poly.GetX(p)/xmax_ymin['xMax']))), int(round(h_prime*(ogr_poly.GetY(p)/xmax_ymin['yMin'])))))
             for p in points:
                 pixels.append(world2Pixel(geoTrans, p[0], p[1]))
-        rasterPoly = Image.new("L", (pxWidth, pxHeight), 255)
+            if point_count > 0:
+                rasterize = ImageDraw.Draw(rasterPolySingle)
+                rasterize.polygon(points, 0)
+                rasterPoly = ImageChops.multiply(rasterPoly, rasterPolySingle)
+        # multiply the sum of masks against the original dataset
+        datasetToPilImage = Image.fromarray(np.uint8(dataset.GetRasterBand(3).ReadAsArray()))
+        rasterPoly = ImageChops.multiply(ImageOps.invert(rasterPoly), datasetToPilImage)
+        # TODO the value of rasterpoly that aren't black represent a human viewable view of
+        # that class's values harvested from the image.  These are the values that we need to
+        # train on for each class.
         if point_count > 0:
             rasterize = ImageDraw.Draw(rasterPoly)
             rasterize.polygon(points, 0)
+            # print(imageToArray(rasterPoly))
             return imageToArray(rasterPoly)
+    elif geometry_count > 0:
+        print "Too many geometries! Encountered multipolygon with %d geometries." % geometry_count
